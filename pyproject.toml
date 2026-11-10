@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aerostacks-icm45686"
+version = "0.1.0"
+description = "Polling I2C driver for the TDK InvenSense ICM-45686 6-axis IMU"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Aerostacks" }]
+dependencies = ["smbus2>=0.5.0,<1"]
+
+[project.urls]
+Repository = "https://github.com/Aerostacks/aerostacks-icm45686"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+aerostacks_icm45686 = ["py.typed"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "A", "RUF"]
+
+[dependency-groups]
+dev = ["ruff>=0.15"]
