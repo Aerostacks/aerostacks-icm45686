@@ -48,6 +48,28 @@ arguments (defaults 0.5 ms and 1 ms) and are worth tuning for your bus: on a
 bit-banged `i2c-gpio` bus a register read costs about 1 ms, and a lead/interval of
 0.5 ms / 0.2 ms needed ~1.4 status reads per sample with no lost samples.
 
+## FIFO mode (0.2.0)
+
+Polling costs a lot of CPU on slow buses. FIFO mode lets the chip buffer 20-byte
+high-resolution packets (19/20-bit accel/gyro, 16-bit temperature, 16-bit
+1 us timestamp) and drains them in one burst read every second or two:
+
+```python
+imu = Icm45686(bus, fifo=FifoConfig(rate_hz=100))  # 8 KB, stream mode
+imu.initialize_fifo()
+unwrap, mapper = TimestampUnwrapper(), ClockMapper()
+batch = imu.read_fifo()
+for s in batch.samples:
+    chip_us = unwrap.update(s.timestamp_raw)
+    missing = unwrap.detect_gaps(1e6 / 100)
+mapper.add_anchor(chip_us, batch.read_completed_monotonic_ns)
+```
+
+FIFO rates are limited only by the ODR table (>= 50 Hz, so one packet is always
+less than one 65.5 ms timestamp wrap). Hi-res data is always scaled to +/-32 g and
++/-4000 dps regardless of the configured ranges. `FifoBatch.was_full` means the
+FIFO had no room for another packet, so stream mode overwrote the oldest data.
+
 ## Soft reset may NACK
 
 On some buses, notably bit-banged `i2c-gpio`, the chip resets before it
