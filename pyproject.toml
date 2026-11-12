@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aerostacks-icm45686"
-version = "0.1.0"
-description = "Polling I2C driver for the TDK InvenSense ICM-45686 6-axis IMU"
+version = "0.2.0"
+description = "Polling and FIFO I2C driver for the TDK InvenSense ICM-45686 6-axis IMU"
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
@@ -32,4 +32,7 @@ line-length = 88
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "A", "RUF"]
 
 [dependency-groups]
-dev = ["ruff>=0.15"]
+dev = ["pytest>=8", "ruff>=0.15"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
