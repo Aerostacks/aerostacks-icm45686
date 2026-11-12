@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aerostacks-icm45686"
-version = "0.2.0rc1"
+version = "0.2.0"
 description = "Polling and FIFO I2C driver for the TDK InvenSense ICM-45686 6-axis IMU"
 readme = "README.md"
 requires-python = ">=3.12"
